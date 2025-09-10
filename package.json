@@ -1,5 +1,5 @@
 {
-  "name": "retention-troubleshooter-api",
+  "name": "rt-api",
   "version": "1.0.0",
   "type": "module",
   "description": "API for running Retention Troubleshooter via POST requests",
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "puppeteer": "^21.3.8"
+    "playwright": "^1.55.0"
   },
   "engines": {
     "node": "18.x"

@@ -1,38 +1,35 @@
 import express from "express";
-import puppeteer from "puppeteer";
+import { chromium } from "playwright";
 
 const app = express();
+const port = process.env.PORT || 10000;
+
 app.use(express.json());
 
 app.post("/run-troubleshooter", async (req, res) => {
   const { url } = req.body;
-
-  if (!url) {
-    return res.status(400).json({ error: "Missing URL" });
-  }
+  if (!url) return res.status(400).json({ error: "Missing url" });
 
   try {
-    const browser = await puppeteer.launch({
-      headless: "new",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      executablePath: puppeteer.executablePath(), // ✅ Chrome path auto-resolved
-    });
-
+    const browser = await chromium.launch({ headless: true });
     const page = await browser.newPage();
-    await page.goto(url, { waitUntil: "networkidle2", timeout: 30000 });
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
 
+    // Example: Grab page title
     const title = await page.title();
 
     await browser.close();
-
-    res.json({ url, title });
-  } catch (err) {
-    console.error("Troubleshooter failed:", err);
-    res.status(500).json({ error: err.message || "Troubleshooter failed" });
+    res.json({
+      url,
+      title,
+      result: "✅ Page loaded successfully with Playwright",
+    });
+  } catch (error) {
+    console.error("Playwright failed:", error);
+    res.status(500).json({ error: error.message });
   }
 });
 
-const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => {
-  console.log(`Troubleshooter API running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Troubleshooter API running on port ${port}`);
 });
