@@ -1,4 +1,3 @@
-
 {
   "name": "retention-troubleshooter-api",
   "version": "1.0.0",
@@ -11,5 +10,8 @@
   "dependencies": {
     "express": "^4.18.2",
     "puppeteer": "^24.20.0"
+  },
+  "engines": {
+    "node": "18.x"
   }
 }

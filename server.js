@@ -1,26 +1,24 @@
-
-import express from 'express';
-import puppeteer from 'puppeteer';
+import express from "express";
+import puppeteer from "puppeteer";
 
 const app = express();
 app.use(express.json());
 
-app.post('/run-troubleshooter', async (req, res) => {
+app.post("/run-troubleshooter", async (req, res) => {
   const { url } = req.body;
 
   if (!url) {
-    return res.status(400).json({ error: 'Missing URL' });
+    return res.status(400).json({ error: "Missing URL" });
   }
 
   try {
     const browser = await puppeteer.launch({
-      headless: 'new',
-      executablePath: puppeteer.executablePath(),
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      headless: "new",
+      args: ["--no-sandbox"],
     });
 
     const page = await browser.newPage();
-    await page.goto(url, { waitUntil: 'domcontentloaded' });
+    await page.goto(url, { waitUntil: "domcontentloaded" });
     const title = await page.title();
     await browser.close();
 
@@ -31,4 +29,6 @@ app.post('/run-troubleshooter', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`Troubleshooter API running on port ${PORT}`));
+app.listen(PORT, () =>
+  console.log(`Troubleshooter API running on port ${PORT}`)
+);
