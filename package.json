@@ -2,7 +2,7 @@
   "name": "retention-troubleshooter-api",
   "version": "1.0.0",
   "type": "module",
-  "description": "",
+  "description": "API for running Retention Troubleshooter via POST requests",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
